@@ -7,7 +7,10 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(express.static("public/images"))
+app.use(express.static("styles"));
+app.use(express.static("images"));
+app.use(express.static("images/VEG"));
+app.use(express.static("static_js"));
 
 const passwordConfirmationCheck = (value, { req }) => {
   if (value !== req.body.password) {
@@ -15,13 +18,6 @@ const passwordConfirmationCheck = (value, { req }) => {
   }
   return true;
 };
-
-// const emailConfirmationCheck = ({req}) =>{
-//   const email = req.body.email.toLowerCase();
-//   if(!email.includes("@citchennai.net")){
-//     throw new Error("Email is not associated with CIT");
-//   }
-// }
 
 app.get("/", (req, res) => {
   res.render("index.ejs");
@@ -37,13 +33,18 @@ app.post(
     check("username")
       .isLength({ min: 3 })
       .withMessage("Username should be minimum 3 characters"),
-    check("email").isEmail().withMessage("Enter a valid email"),
+    check("email")
+      .isEmail()
+      .custom((value) => {
+        return value.endsWith("@citchennai.net");
+      })
+      .withMessage("Email must be associated with CIT"),
     check("password")
       .isLength({ min: 6 })
       .withMessage("Password should be at least 6 characters long"),
     check("confirm")
       .custom(passwordConfirmationCheck)
-      .withMessage("Confirm passwords does not match with password"),
+      .withMessage("Confirm password does not match with password"),
   ],
   (req, res) => {
     var isOpen = false;
@@ -66,7 +67,7 @@ app.post(
         email: req.body.email,
       });
     } else {
-      res.render("static.ejs");
+      res.render("main.ejs"); // DO NOT FORGET TO CHANGE THIS
     }
   }
 );
@@ -74,8 +75,15 @@ app.post(
 app.post(
   "/login/submit",
   [
-    check("email").isEmail().withMessage("Enter valid email address"),
-    check("password").isLength({ min: 6 }).withMessage("Invalid password"),
+    check("email")
+      .isEmail()
+      .custom((value) => {
+        return value.endsWith("@citchennai.net");
+      })
+      .withMessage("Email must be associated with CIT"),
+    check("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters long"),
   ],
   (req, res) => {
     var isOpen = false;
@@ -87,7 +95,6 @@ app.post(
     if (!errors.isEmpty()) {
       res.render("login.ejs", {
         errors: errors.mapped(),
-        cssFile: "styles/styles.css",
       });
     }
     if (errors.isEmpty() && isOpen == true) {
@@ -97,13 +104,12 @@ app.post(
       });
     }
     if (errors.isEmpty() && isOpen == false) {
-      res.render("static.ejs");
+      res.render("main.ejs"); //CHANGE THIS
     }
   }
 );
 
 //Voting logic
-
 const vegFoods = [
   {
     name: "idly",
@@ -153,10 +159,10 @@ app.post("/vote", (req, res) => {
   });
 });
 
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
 
 //functions
 function selectRandomFood() {

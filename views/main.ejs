@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mess Foods of the Day!</title>
+    <title>Pick your food</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,195 +14,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <style>
-      * {
-        font-family: "Bebas Neue", sans-serif;
-        font-weight: 500;
-        letter-spacing: 1.01px;
-      }
-      body {
-        --color-primary: #009579;
-        --color-primary-dark: #007f67;
-        --color-secondary: #252c6a;
-        --color-error: #cc3333;
-        --color-success: #4bb544;
-        --border-radius: 4px;
-
-        margin: none;
-        align-items: center;
-        background-image: linear-gradient(
-            rgba(0, 0, 0, 0.4),
-            rgba(0, 0, 0, 0.6)
-          ),
-          url("../images/bg1.jpg");
-        background-size: cover;
-        font-size: 20px;
-      }
-      :root {
-        --mainColor: gold;
-        --mainColor-dark: rgb(206, 191, 32);
-      }
-      header {
-        background-repeat: no-repeat;
-        background-size: cover;
-        height: 107.2vh;
-      }
-      .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1em 0;
-        margin-bottom: none;
-      }
-      .navbar_logo {
-        font-size: 1.5rem;
-        color: var(--mainColor);
-        text-decoration: none;
-        margin-left: none;
-        text-transform: uppercase;
-      }
-      .navbar_list {
-        display: flex;
-        list-style-type: none;
-        font-size: 1.1rem;
-        margin-right: 25rem;
-      }
-      .navbar_list li {
-        margin-right: 1em;
-        color: hsl(0, 0%, 100%);
-      }
-      .navbar_icons {
-        color: var(--mainColor);
-        margin-right: 0.5em;
-        font-size: 1.2rem;
-      }
-
-      .navbar > img {
-        margin-left: 20px;
-        border-radius: 20px;
-        max-width: 70px;
-      }
-      .header_desc {
-        color: hsl(0, 0%, 100%);
-      }
-
-      .section_title {
-        color: rgb(206, 191, 32);
-        text-align: center;
-        margin: none;
-        font-size: 15.5px;
-      }
-      .section_title h2 {
-        position: relative;
-        display: inline-block;
-      }
-      .section_title h2 :before {
-        content: " ";
-        position: absolute;
-        width: 80px;
-        height: 3px;
-        background-color: var(--mainColor);
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-55%);
-      }
-      .our_menu {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        margin: none;
-        text-align: center;
-        color: white;
-      }
-      .menu_column {
-        width: 31%;
-      }
-      h2 {
-        padding: 0px;
-      }
-      .single_menu {
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        padding: 1rem;
-        margin: none;
-      }
-      .single_menu img {
-        width: 100px;
-        height: 100px;
-        border: 1px dashed rgba(0, 0, 0, 0);
-        border-radius: 100%;
-        margin-right: 15px;
-      }
-      button:hover {
-        background-color: var(--mainColor-dark);
-      }
-      button:active {
-        transform: scale(0.98);
-      }
-
-      .single_menu button:hover {
-        background-color: var(--mainColor-dark);
-        transform: scale(0.9);
-        cursor: pointer;
-      }
-
-      .single_menu button {
-        transition-property: width, height, transform, background, font-size;
-        transition-duration: 1s, 1s, 1s, 1s, 1s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        overflow: hidden;
-        background-image: linear-gradient(
-            rgb(255, 255, 255),
-            rgba(255, 255, 255, 0.6)
-          ),
-          url();
-
-        background-size: cover;
-        margin-right: 10px;
-      }
-      .selected {
-        background-image: linear-gradient(
-            rgba(255, 255, 255, 0.4),
-            rgba(255, 255, 255, 0.6)
-          ),
-          url();
-        transition: background-color 0.4s ease-in, border-color 0.4s ease-in;
-      }
-
-      .vote_now {
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .vote_now button {
-        align-self: center;
-        background-color: var(--mainColor);
-        font-size: 20px;
-        border-radius: 10px;
-        padding: 10px;
-        border: none;
-        width: 50%;
-      }
-      .vote_now button:hover {
-        background-color: var(--mainColor-dark);
-      }
-      .vote_now button:active {
-        transform: scale(0.98);
-      }
-    </style>
+    <link rel="stylesheet" href="/menu.css" />
   </head>
   <body>
     <header>
       <div class="main">
         <nav class="navbar">
-          <!-- <img src="../public/images/" ; /> -->
+          <img src="/CIT.jpg" />
           <a class="navbar_logo">CIT MESS TRACKER</a>
           <ul class="navbar_list">
             <li><i class="fas fa-home navbar_icons"></i>Home</li>
@@ -215,18 +33,23 @@
             </li>
             <li><i class="fa-solid fa-book-open navbar_icons"></i>Policy</li>
           </ul>
+          <a href="/" class="logout">Logout</a>
         </nav>
         <div class="section_title">
           <h2>
             Today's Mess Menu
             <i class="fas fa-hamburger"></i>
           </h2>
+          <select name="" class="dropdown-container">
+            <option value="veg">Veg</option>
+            <option value="nonVeg">Non Veg</option>
+          </select>
         </div>
         <div class="our_menu">
           <div class="menu_column">
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img id="image" src="images/VEG/veg_rice.jpg" />
+                <img id="image" src="/veg_rice.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Veg Rice</h3>
@@ -234,7 +57,7 @@
             </div>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/bisibelebath.jpg" />
+                <img src="/bisibelebath.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Bisebelebath</h3>
@@ -242,7 +65,7 @@
             </div>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/hakka_noodles.jpg" />
+                <img src="/hakka_noodles.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Veg Hakka Noodles</h3>
@@ -252,7 +75,7 @@
           <div class="menu_column">
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/curd_rice.jpg" />
+                <img src="/curd_rice.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Curd Rice</h3>
@@ -260,7 +83,7 @@
             </div>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/sambar.jpg" />
+                <img src="/sambar.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Sambhar Rice</h3>
@@ -268,7 +91,7 @@
             </div>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/gobi_rice.jpg" />
+                <img src="/gobi_rice.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Gobi Fried Rice</h3>
@@ -278,7 +101,7 @@
           <div class="menu_column">
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/veg_rice.jpg" />
+                <img src="/veg_rice.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Veg Rice</h3>
@@ -286,7 +109,7 @@
             </div>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/bisibelebath.jpg" />
+                <img src="/bisibelebath.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Bisebelebath</h3>
@@ -294,7 +117,7 @@
             </div>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
-                <img src="images/VEG/bisibelebath.jpg" />
+                <img src="/bisibelebath.jpg" />
               </button>
               <div class="menu_content">
                 <h3>Veg Hakka Noodles</h3>
@@ -307,6 +130,6 @@
         </div>
       </div>
     </header>
-    <script src="./menu.js"></script>
+    <script src="/menu.js"></script>
   </body>
 </html>

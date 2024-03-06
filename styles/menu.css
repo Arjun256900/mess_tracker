@@ -1,7 +1,6 @@
 * {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 500;
-  /* font-style: normal; */
   letter-spacing: 1.01px;
 }
 body {
@@ -15,7 +14,7 @@ body {
   margin: none;
   align-items: center;
   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
-    url("../images/bg1.jpg");
+    url("/bg1.jpg");
   background-size: cover;
   font-size: 20px;
 }
@@ -28,6 +27,7 @@ header {
   background-size: cover;
   height: 107.2vh;
 }
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -72,15 +72,52 @@ header {
   text-align: center;
   margin: none;
   font-size: 15.5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 .section_title h2 {
   position: relative;
   display: inline-block;
+  font-size: 45px;
+}
+
+.logout {
+  padding: 10px;
+  margin-right: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--mainColor);
+  transition: all 0.4s;
+  text-decoration: none;
+  color: white;
+}
+.logout:hover {
+  background-color: var(--mainColor-dark);
+  transition: all 0.4s;
+}
+
+.dropdown-container {
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 10px;
+}
+
+option {
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 10px;
 }
 .section_title h2 :before {
   content: " ";
   position: absolute;
-  /* display: inline-block; */
   width: 80px;
   height: 3px;
   background-color: var(--mainColor);
@@ -90,7 +127,7 @@ header {
 }
 .our_menu {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   margin: none;
@@ -103,12 +140,14 @@ header {
 h2 {
   padding: 0px;
 }
+
 .single_menu {
   font-size: 20px;
   display: flex;
   align-items: center;
   padding: 1rem;
-  margin: none;
+  margin-bottom: 10px;
+  transition: all 0.4s;
 }
 .single_menu img {
   width: 100px;
@@ -129,14 +168,12 @@ button:active {
   transform: scale(0.9);
   cursor: pointer;
 }
-/* .menu_column :hover{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url();   
-} */
-/* .single_menu :active{
-    transform: scale(2);
-} */
+.single_menu:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.4s;
+}
 .single_menu button {
-  /* -webkit-transition:-webkit-transform 1s, background 1s, width 1s,height 1s,font-size 1s; */
   transition-property: width, height, transform, background, font-size;
   transition-duration: 1s, 1s, 1s, 1s, 1s;
   display: flex;
@@ -187,9 +224,13 @@ button:active {
   padding: 10px;
   border: none;
   width: 50%;
+  cursor: pointer;
+  transition: all 0.4s;
 }
 .vote_now button:hover {
   background-color: var(--mainColor-dark);
+  cursor: pointer;
+  transition: all 0.4s;
 }
 .vote_now button:active {
   transform: scale(0.98);
