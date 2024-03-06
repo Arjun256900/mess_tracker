@@ -1,3 +1,129 @@
+* {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+body {
+  --color-primary: #009579;
+  --color-primary-dark: #007f67;
+  --color-secondary: #252c6a;
+  --color-error: #cc3333;
+  --color-success: #4bb544;
+  --border-radius: 4px;
+
+  margin: none;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../images/food2.jpg);
+  background-size: cover;
+  font-size: 20px;
+}
+div.container {
+  background: #ecf0f1;
+  text-align: center;
+  width: 400px;
+  max-width: 400px;
+  margin: 1rem;
+  padding: 2rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  align-items: center;
+  justify-content: right;
+}
+form {
+  margin: auto;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.form > *:first-child {
+  margin-top: 0px;
+}
+
 h1 {
-  color: rebeccapurple;
+  margin-top: 10px;
+}
+
+.form > *:last-child {
+  margin-bottom: 0;
+}
+.form_message {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.form_input-error {
+  margin-bottom: 1rem;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.form_input-success {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--color-success);
+}
+.form_title {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+/* .form_input-error-message {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-error);
+} */
+
+.error{
+  color: red;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+}
+
+input {
+  width: 90%;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  transition: background 0.2s, border-color 0.2s;
+}
+.form_input:focus {
+  border-color: wheat;
+  background-color: blanchedalmond;
+}
+
+button {
+  align-self: auto;
+  background-color: peachpuff;
+  font-size: 20px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  width: 50%;
+  transition: all 0.4s;
+}
+button:hover {
+  background-color: darksalmon;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+button:active {
+  transform: scale(0.98);
+}
+
+.form_link {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.form_link:hover {
+  text-decoration: underline;
+}
+
+.form_hidden {
+  display: none;
 }
