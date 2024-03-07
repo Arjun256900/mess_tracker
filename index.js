@@ -61,9 +61,9 @@ app.post(
       });
     }
     if (errors.isEmpty() && !isOpen) {
-      res.render("main.ejs", {choices: choicesForTheDay});  //TODO
+      res.render("main.ejs", { choices: choicesForTheDay }); //TODO
     } else {
-      res.render("static.ejs"); // DO NOT FORGET TO CHANGE THIS
+      res.render("main.ejs", { choices: choicesForTheDay }); // DO NOT FORGET TO CHANGE THIS
     }
   }
 );
@@ -97,13 +97,13 @@ app.post(
       res.render("main.ejs", { choices: choicesForTheDay });
     }
     if (errors.isEmpty() && isOpen == false) {
-      res.render("static.ejs"); //CHANGE THIS
+      res.render("main.ejs", { choices: choicesForTheDay }); //CHANGE THIS
     }
   }
 );
 
 app.get("/home", (req, res) => {
-  res.render("main.ejs");
+  res.render("main.ejs", { choices: choicesForTheDay });
 });
 
 //Voting logic
@@ -127,7 +127,7 @@ const vegFoods = [
     name: "veg-noodles",
   },
   {
-    name: "vadagari",
+    name: "vada-curry",
   },
   {
     name: "pongal",
@@ -136,7 +136,7 @@ const vegFoods = [
     name: "bread-toast",
   },
   {
-    name: "porota",
+    name: "parotta",
   },
   {
     name: "chappathi",
@@ -145,25 +145,30 @@ const vegFoods = [
 
 // selecting the menu of the day
 var choicesForTheDay = [
-  { name: "vadagari", votes: 0 },
+  { name: "vada-curry", votes: 0 },
   { name: "curd-rice", votes: 0 },
   { name: "sambar-rice", votes: 0 },
   { name: "chappathi", votes: 0 },
   { name: "gobi-rice", votes: 0 },
-  {name: "pongal", votes: 0 },
-  {name: "porota", votes: 0 },
-  {name: "bread-toast", votes: 0 },
-  { name: "veg-noodles", votes:0},
+  { name: "pongal", votes: 0 },
+  { name: "parotta", votes: 0 },
+  { name: "bread-toast", votes: 0 },
 ];
 // setInterval(selectRandomFood, 24 * 60 * 60 * 1000);
 
-app.post("/vote", (req, res) => {
-  console.log(req.body.choice);
-  choicesForTheDay.forEach((choice) => {
-    if (choice.name == req.body.choice) {
-      choice.votes++;
-    }
-  });
+app.get("/vote", (req, res) => {
+  console.log(req.query.food);
+  let time = new Date().getHours();
+  if (time > 6 && time < 18) {
+    const selectedFood = choicesForTheDay.find(
+      (food) => food.name === req.query.food
+    );
+    selectedFood.votes++;
+    console.log(selectedFood.votes);
+    res.redirect("/home");
+  } else {
+    res.render("static.ejs");
+  }
 });
 
 app.listen(PORT, () => {
@@ -174,7 +179,7 @@ app.listen(PORT, () => {
 function selectRandomFood() {
   choicesForTheDay = [];
   const randomIndex = [];
-  while (randomIndex.length < 5) {
+  while (randomIndex.length < 8) {
     const idx = Math.floor(Math.random() * vegFoods.length);
     if (!randomIndex.includes(idx)) {
       randomIndex.push(idx);

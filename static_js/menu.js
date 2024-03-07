@@ -27,6 +27,3 @@ for (var i = 0; i < x.length; i++) {
   );
 }
 
-function voteFunc() {
-  window.alert("Voted Successfully");
-}
