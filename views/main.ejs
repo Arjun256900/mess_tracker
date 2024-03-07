@@ -23,7 +23,10 @@
           <img src="/CIT.jpg" />
           <a class="navbar_logo">CIT MESS TRACKER</a>
           <ul class="navbar_list">
-            <li><i class="fas fa-home navbar_icons"></i>Home</li>
+            <li>
+              <i class="fas fa-home navbar_icons"></i>
+              <a href="/home" class="home">Home</a>
+            </li>
             <li>
               <i class="fa-solid fa-square-poll-vertical navbar_icons"></i
               >Results
@@ -47,82 +50,16 @@
         </div>
         <div class="our_menu">
           <div class="menu_column">
+            <% if(locals.choices) {%> <% choices.forEach((choice) => { %>
             <div class="single_menu">
               <button id="menu_button" onclick="myFunction()">
                 <img id="image" src="/veg_rice.jpg" />
               </button>
               <div class="menu_content">
-                <h3>Veg Rice</h3>
+                <h3><%=choice.name %></h3>
               </div>
             </div>
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/bisibelebath.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Bisebelebath</h3>
-              </div>
-            </div>
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/hakka_noodles.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Veg Hakka Noodles</h3>
-              </div>
-            </div>
-          </div>
-          <div class="menu_column">
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/curd_rice.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Curd Rice</h3>
-              </div>
-            </div>
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/sambar.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Sambhar Rice</h3>
-              </div>
-            </div>
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/gobi_rice.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Gobi Fried Rice</h3>
-              </div>
-            </div>
-          </div>
-          <div class="menu_column">
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/veg_rice.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Veg Rice</h3>
-              </div>
-            </div>
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/bisibelebath.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Bisebelebath</h3>
-              </div>
-            </div>
-            <div class="single_menu">
-              <button id="menu_button" onclick="myFunction()">
-                <img src="/bisibelebath.jpg" />
-              </button>
-              <div class="menu_content">
-                <h3>Veg Hakka Noodles</h3>
-              </div>
-            </div>
+            <%});%> <% }%>
           </div>
         </div>
         <div class="vote_now">

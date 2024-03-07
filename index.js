@@ -6,7 +6,6 @@ const PORT = 3000;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
 app.use(express.static("styles"));
 app.use(express.static("images"));
 app.use(express.static("images/VEG"));
@@ -62,12 +61,9 @@ app.post(
       });
     }
     if (errors.isEmpty() && !isOpen) {
-      res.render("main.ejs", {
-        name: req.body.password,
-        email: req.body.email,
-      });
+      res.render("main.ejs", {choices: choicesForTheDay});  //TODO
     } else {
-      res.render("main.ejs"); // DO NOT FORGET TO CHANGE THIS
+      res.render("static.ejs"); // DO NOT FORGET TO CHANGE THIS
     }
   }
 );
@@ -98,16 +94,17 @@ app.post(
       });
     }
     if (errors.isEmpty() && isOpen == true) {
-      res.render("main.ejs", {
-        name: req.body.password,
-        email: req.body.email,
-      });
+      res.render("main.ejs", { choices: choicesForTheDay });
     }
     if (errors.isEmpty() && isOpen == false) {
-      res.render("main.ejs"); //CHANGE THIS
+      res.render("static.ejs"); //CHANGE THIS
     }
   }
 );
+
+app.get("/home", (req, res) => {
+  res.render("main.ejs");
+});
 
 //Voting logic
 const vegFoods = [
@@ -147,8 +144,18 @@ const vegFoods = [
 ];
 
 // selecting the menu of the day
-var choicesForTheDay = [];
-setInterval(selectRandomFood, 24 * 60 * 60 * 1000);
+var choicesForTheDay = [
+  { name: "vadagari", votes: 0 },
+  { name: "curd-rice", votes: 0 },
+  { name: "sambar-rice", votes: 0 },
+  { name: "chappathi", votes: 0 },
+  { name: "gobi-rice", votes: 0 },
+  {name: "pongal", votes: 0 },
+  {name: "porota", votes: 0 },
+  {name: "bread-toast", votes: 0 },
+  { name: "veg-noodles", votes:0},
+];
+// setInterval(selectRandomFood, 24 * 60 * 60 * 1000);
 
 app.post("/vote", (req, res) => {
   console.log(req.body.choice);
@@ -158,7 +165,6 @@ app.post("/vote", (req, res) => {
     }
   });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

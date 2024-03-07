@@ -52,6 +52,15 @@ header {
   margin-right: 1em;
   color: hsl(0, 0%, 100%);
 }
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+.home:hover{
+  text-decoration: underline;
+}
 .navbar_icons {
   color: var(--mainColor);
   margin-right: 0.5em;
