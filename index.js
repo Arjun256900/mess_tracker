@@ -1,9 +1,29 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { check, validationResult } from "express-validator";
+import mongoose from "mongoose";
 
 const PORT = 3000;
 const app = express();
+
+const mongoURI = "mongodb://localhost:27017/bookstore";
+
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+db.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+});
+
+const foodSchema = mongoose.Schema({
+  name: String,
+  votes: { type: Number, default: 0 },
+});
+const Food = mongoose.model("Food", foodSchema);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("styles"));
@@ -154,25 +174,27 @@ var choicesForTheDay = [
   { name: "parotta", votes: 0 },
   { name: "bread-toast", votes: 0 },
 ];
-// setInterval(selectRandomFood, 24 * 60 * 60 * 1000);
+// setInterval(selectRandomFood, 15000);
 
-app.get("/vote", (req, res) => {
+app.get("/vote", async (req, res) => {
   console.log(req.query.food);
   let time = new Date().getHours();
   if (time > 6 && time < 18) {
-    const selectedFood = choicesForTheDay.find(
-      (food) => food.name === req.query.food
-    );
-    selectedFood.votes++;
-    console.log(selectedFood.votes);
-    res.redirect("/home");
+    try {
+      const foodName = req.query.food;
+      const result = await db
+        .collection("books")
+        .updateOne({ name: foodName }, { $inc: { votes: 1 } });
+      if (result.modifiedCount == 0) {
+        return res.status(404).send("Food not found");
+      }
+      res.redirect("/home");
+    } catch (err) {
+      res.json({ message: err.message });
+    }
   } else {
     res.render("static.ejs");
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
 });
 
 //functions
@@ -191,6 +213,7 @@ function selectRandomFood() {
       votes: 0,
     };
     choicesForTheDay.push(randFood);
+    db.collection("books").insertOne(randFood);
   });
   console.log(choicesForTheDay);
 }
