@@ -28,18 +28,28 @@
               <a href="/home" class="home">Home</a>
             </li>
             <li>
-              <i class="fa-solid fa-square-poll-vertical navbar_icons"></i
-              >Results
+              <i class="fa-solid fa-square-poll-vertical navbar_icons"></i>
+              <a href="/calculateResult" class="result">Results</a>
             </li>
             <li>
-              <i class="fa-solid fa-square-phone navbar_icons"></i>Contact Us
+              <i class="fa-solid fa-square-phone navbar_icons"></i
+              ><a href="/CIT/policy" class="contact">Contact Us</a>
             </li>
-            <li><i class="fa-solid fa-book-open navbar_icons"></i>Policy</li>
+            <li>
+              <i class="fa-solid fa-book-open navbar_icons"></i
+              ><a href="/CIT/policy" class="policy">Policy</a>
+            </li>
           </ul>
           <a href="/" class="logout">Logout</a>
         </nav>
         <% if(!locals.choices) {%>
-        <h1>Voting has ended</h1>
+        <div class="container">
+          <div>
+            <h1 id="vote-ended">
+              Voting has ended. Come back tomorrow at 6AM!
+            </h1>
+          </div>
+        </div>
         <% }%> <% if(locals.choices) {%>
         <div class="section_title">
           <h2>

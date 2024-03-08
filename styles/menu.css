@@ -240,3 +240,21 @@ button:active {
   background-color: var(--mainColor-dark);
   transition: all 0.4s;
 }
+
+.result:hover,
+.policy:hover,
+.contact:hover {
+  text-decoration: underline;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  color: white;
+}
+
+#vote-ended {
+  letter-spacing: 5px;
+}

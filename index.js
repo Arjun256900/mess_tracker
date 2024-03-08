@@ -23,7 +23,6 @@ const foodSchema = mongoose.Schema({
   name: String,
   votes: { type: Number, default: 0 },
 });
-const Food = mongoose.model("Food", foodSchema);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("styles"));
@@ -123,7 +122,12 @@ app.post(
 );
 
 app.get("/home", (req, res) => {
-  res.render("main.ejs", { choices: choicesForTheDay });
+  const time = new Date().getHours();
+  if (time > 6 && time < 18) {
+    res.render("main.ejs", { choices: choicesForTheDay });
+  } else {
+    res.render("main.ejs");
+  }
 });
 
 //Voting logic
@@ -165,14 +169,14 @@ const vegFoods = [
 
 // selecting the menu of the day
 var choicesForTheDay = [
-  { name: "vada-curry", votes: 0 },
-  { name: "curd-rice", votes: 0 },
-  { name: "sambar-rice", votes: 0 },
   { name: "chappathi", votes: 0 },
-  { name: "gobi-rice", votes: 0 },
-  { name: "pongal", votes: 0 },
+  { name: "curd-rice", votes: 0 },
   { name: "parotta", votes: 0 },
-  { name: "bread-toast", votes: 0 },
+  { name: "veg-noodles", votes: 0 },
+  { name: "pongal", votes: 0 },
+  { name: "gobi-rice", votes: 0 },
+  { name: "vada-curry", votes: 0 },
+  { name: "idly", votes: 0 },
 ];
 // setInterval(selectRandomFood, 15000);
 
@@ -197,6 +201,31 @@ app.get("/vote", async (req, res) => {
   }
 });
 
+app.get("/calculateResult", async (req, res) => {
+  const time = new Date().getHours();
+  console.log(choicesForTheDay);
+  try {
+    if (time >= 18 || time < 6) {
+      const winner = await db
+        .collection("books")
+        .aggregate([{ $sort: { votes: -1 } }, { $limit: 1 }])
+        .toArray();
+      if (winner.length == 0) {
+        return res.status(404).send("No votes received");
+      }
+      console.log(winner);
+      res.render("result.ejs", { food: winner });
+    } else {
+      res.render("result.ejs");
+    }
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/CIT/policy", (req, res) => {
+  res.render("policy.ejs");
+});
 //functions
 function selectRandomFood() {
   choicesForTheDay = [];

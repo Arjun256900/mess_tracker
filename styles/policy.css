@@ -1,0 +1,109 @@
+* {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 500;
+  letter-spacing: 1.01px;
+}
+body {
+  --color-primary: #009579;
+  --color-primary-dark: #007f67;
+  --color-error: #cc3333;
+  --color-success: #4bb544;
+  --border-radius: 4px;
+  margin: none;
+  align-items: center;
+  background-image: url("/black_swirl.jpg");
+  background-size: cover;
+  font-size: 20px;
+}
+
+:root {
+  --mainColor: gold;
+  --mainColor-dark: rgb(206, 191, 32);
+}
+
+li a {
+  text-decoration: none;
+  color: white;
+}
+
+li a:hover {
+  text-decoration: none;
+  color: var(--mainColor);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 0;
+  margin-bottom: none;
+}
+.navbar_logo a {
+  font-size: 1.5rem;
+  color: var(--mainColor);
+  text-decoration: none;
+  margin-left: none;
+  text-transform: uppercase;
+}
+.navbar_list {
+  display: flex;
+  font-size: 1.1rem;
+  margin-right: 25rem;
+}
+.navbar_list li {
+  margin-right: 1em;
+  color: hsl(0, 0%, 100%);
+}
+.navbar_icons {
+  color: var(--mainColor);
+  margin-right: 0.5em;
+  font-size: 1.2rem;
+}
+.navbar > a img {
+  margin-left: 20px;
+  border-radius: 10px;
+  max-width: 70px;
+}
+
+.centerMain {
+  border-radius: 10px;
+  background: white;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.2)
+  );
+  backdrop-filter: blur(1rem);
+  z-index: 1;
+  float: inline-start;
+  border-radius: 5rem;
+  padding: 2rem;
+  text-align: justify;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.centerMain h1 {
+  text-align: center;
+  color: var(--mainColor);
+}
+
+.centerMain h3 {
+  margin-left: 10px;
+  text-align: left;
+  color: var(--mainColor);
+}
+
+.centerMain p {
+  color: white;
+}
+.centerMain .block {
+  margin-left: 10px;
+}
+.centerMain a {
+  text-decoration: none;
+  color: var(--mainColor);
+}
+.centerMain a:hover {
+  color: var(--mainColor-dark);
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <title>Results</title>
+    <style>
+      body {
+        --color-primary: #009579;
+        --color-primary-dark: #007f67;
+        --color-error: #cc3333;
+        --color-success: #4bb544;
+        --border-radius: 4px;
+        margin: none;
+        align-items: center;
+        background-image: url("/black_swirl.jpg");
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        font-size: 20px;
+      }
+      :root {
+        --mainColor: gold;
+        --mainColor-dark: rgb(206, 191, 32);
+      }
+      li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      li a:hover {
+        text-decoration: none;
+        color: var(--mainColor);
+      }
+      header {
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em 0;
+        margin-bottom: none;
+      }
+      .navbar_logo {
+        font-size: 1.5rem;
+        color: var(--mainColor);
+        text-decoration: none;
+        margin-left: none;
+        text-transform: uppercase;
+      }
+      .navbar_list {
+        display: flex;
+        list-style-type: none;
+        font-size: 1.1rem;
+        margin-right: 25rem;
+      }
+      .navbar_list li {
+        margin-right: 1em;
+        color: hsl(0, 0%, 100%);
+      }
+      .navbar_icons {
+        color: var(--mainColor);
+        margin-right: 0.5em;
+        font-size: 1.2rem;
+      }
+
+      .navbar > a img {
+        margin-left: 20px;
+        border-radius: 10px;
+        max-width: 70px;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card {
+        display: flex;
+        margin-top: 45px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: black;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        width: 500px;
+        height: 500px;
+      }
+      .card h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: gold;
+      }
+      .card p {
+        font-size: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .card img {
+        width: 50%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .span {
+        color: gold;
+      }
+      .image {
+        border-radius: 10px;
+        max-width: 70px;
+        margin-right: 20px;
+      }
+      h2 {
+        color: var(--mainColor);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="main">
+        <nav class="navbar">
+          <a href="https://www.citchennai.edu.in/"><img src="/CIT.jpg" /></a>
+          <a class="navbar_logo" href="">CIT MESS TRACKER</a>
+          <ul class="navbar_list">
+            <li>
+              <i class="fas fa-home navbar_icons"></i><a href="/home">Home</a>
+            </li>
+            <li>
+              <i class="fa-solid fa-square-poll-vertical navbar_icons"></i
+              ><a href="/calculateResult">Results</a>
+            </li>
+            <li>
+              <i class="fa-solid fa-square-phone navbar_icons"></i
+              ><a href="/CIT/policy">Contact Us</a>
+            </li>
+            <li>
+              <i class="fa-solid fa-book-open navbar_icons"></i
+              ><a href="/CIT/policy">Policy</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <%if(locals.food){%>
+      <div class="card">
+        <h1><span>Vegetarian Food of the Day! </span></h1>
+        <img src="/<%= food[0].name%>.jpg" alt="Winning Food" />
+        <h1><%= food[0].name%></h1>
+        <h2>Votes - <%= food[0].votes%></h2>
+      </div>
+      <% } else {%>
+      <div class="card">
+        <h1><span>No results to display, come back at evening!</span></h1>
+      </div>
+      <%}%>
+    </div>
+  </body>
+</html>
