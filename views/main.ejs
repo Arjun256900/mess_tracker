@@ -25,7 +25,7 @@
           <ul class="navbar_list">
             <li>
               <i class="fas fa-home navbar_icons"></i>
-              <a href="/home" class="home">Home</a>
+              <a href="/home?email=<%=userEmail %>" class="home">Home</a>
             </li>
             <li>
               <i class="fa-solid fa-square-poll-vertical navbar_icons"></i>
@@ -42,7 +42,15 @@
           </ul>
           <a href="/" class="logout">Logout</a>
         </nav>
-        <% if(!locals.choices) {%>
+        <%if(locals.isVoted) {%>
+        <div class="container">
+          <div>
+            <h1 id="vote-ended">
+              You have voted successfully! Come back at 6PM to view results!
+            </h1>
+          </div>
+        </div>
+        <%}%> <% if(!locals.choices && !locals.isVoted) {%>
         <div class="container">
           <div>
             <h1 id="vote-ended">
@@ -71,7 +79,9 @@
               </button>
               <div class="menu_content">
                 <h3><%=choice.name %></h3>
-                <a href="/vote?food=<%= choice.name%>" class="vote-now"
+                <a
+                  href="/vote?food=<%= choice.name%>&email=<%=userEmail%>"
+                  class="vote-now"
                   >Vote this</a
                 >
               </div>

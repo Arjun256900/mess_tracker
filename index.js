@@ -19,11 +19,6 @@ db.once("open", () => {
   });
 });
 
-const foodSchema = mongoose.Schema({
-  name: String,
-  votes: { type: Number, default: 0 },
-});
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("styles"));
 app.use(express.static("images"));
@@ -37,6 +32,17 @@ const passwordConfirmationCheck = (value, { req }) => {
   return true;
 };
 
+const now = new Date();
+const millisTill6PM =
+  new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0) - now;
+
+if (millisTill6PM > 0) {
+  // If there's still some time left, just wait till 6PM
+  setTimeout(resetIsVoted, millisTill6PM);
+} else {
+  // Run immediatly if it's already past 6PM
+  resetIsVoted();
+}
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
@@ -64,7 +70,7 @@ app.post(
       .custom(passwordConfirmationCheck)
       .withMessage("Confirm password does not match with password"),
   ],
-  (req, res) => {
+  async (req, res) => {
     var isOpen = false;
     const time = 19;
     if (time > 6 && time < 18) {
@@ -76,13 +82,31 @@ app.post(
     if (!errors.isEmpty()) {
       res.render("index.ejs", {
         errors: errors.mapped(),
-        cssFile: "styles/styles.css",
       });
     }
     if (errors.isEmpty() && !isOpen) {
-      res.render("main.ejs", { choices: choicesForTheDay }); //TODO
+      let isExist = await db
+        .collection("users")
+        .findOne({ email: req.body.email });
+
+      if (isExist === null) {
+        await db.collection("users").insertOne({
+          name: req.body.username,
+          email: req.body.email,
+          password: req.body.password,
+          isVoted: false,
+          isAdmin: false,
+        });
+        let currentFoods = await db.collection("books").find().toArray();
+        res.render("main.ejs", {
+          choices: currentFoods,
+          userEmail: req.body.email,
+        });
+      } else {
+        return res.json({ message: "User with this email already exists." });
+      }
     } else {
-      res.render("main.ejs", { choices: choicesForTheDay }); // DO NOT FORGET TO CHANGE THIS
+      res.render("static.ejs"); // DO NOT FORGET TO CHANGE THIS
     }
   }
 );
@@ -100,7 +124,7 @@ app.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
   ],
-  (req, res) => {
+  async (req, res) => {
     var isOpen = false;
     const time = new Date().getHours();
     if (time > 6 && time < 18) {
@@ -113,20 +137,44 @@ app.post(
       });
     }
     if (errors.isEmpty() && isOpen == true) {
-      res.render("main.ejs", { choices: choicesForTheDay });
+      const isExist = await db
+        .collection("users")
+        .findOne({ email: req.body.email });
+      if (isExist != null && isExist.isVoted == false) {
+        let currentFoods = await db.collection("books").find().toArray();
+        res.render("main.ejs", {
+          choices: currentFoods,
+          userEmail: req.body.email,
+        });
+      } else if (isExist != null && isExist.isVoted == true) {
+        res.render("main.ejs", { isVoted: true, userEmail: req.body.email });
+      } else {
+        return res.json({ message: "User with this email does not exist." });
+      }
     }
     if (errors.isEmpty() && isOpen == false) {
-      res.render("main.ejs", { choices: choicesForTheDay }); //CHANGE THIS
+      res.render("main.ejs"); //CHANGE THIS
     }
   }
 );
 
-app.get("/home", (req, res) => {
+app.get("/home", async (req, res) => {
   const time = new Date().getHours();
   if (time > 6 && time < 18) {
-    res.render("main.ejs", { choices: choicesForTheDay });
+    let currentFoods = await db.collection("books").find().toArray();
+    let voted = await db
+      .collection("users")
+      .findOne({ email: req.query.email });
+    if (voted == false) {
+      res.render("main.ejs", {
+        choices: currentFoods,
+        userEmail: req.query.email,
+      });
+    } else {
+      res.render("main.ejs", { isVoted: true, userEmail: req.query.email });
+    }
   } else {
-    res.render("main.ejs");
+    res.render("main.ejs", {userEmail: req.query.email});
   }
 });
 
@@ -181,18 +229,29 @@ var choicesForTheDay = [
 // setInterval(selectRandomFood, 15000);
 
 app.get("/vote", async (req, res) => {
-  console.log(req.query.food);
   let time = new Date().getHours();
   if (time > 6 && time < 18) {
     try {
-      const foodName = req.query.food;
-      const result = await db
-        .collection("books")
-        .updateOne({ name: foodName }, { $inc: { votes: 1 } });
-      if (result.modifiedCount == 0) {
-        return res.status(404).send("Food not found");
+      const userEmail = req.query.email.toLocaleLowerCase();
+      const user = await db.collection("users").findOne({ email: userEmail });
+      if (!user) {
+        return res.status(404).send("User not found");
       }
-      res.redirect("/home");
+      if (user.isVoted == false) {
+        const foodName = req.query.food;
+        const result = await db
+          .collection("books")
+          .updateOne({ name: foodName }, { $inc: { votes: 1 } });
+        if (result.modifiedCount == 0) {
+          return res.status(404).send("Food not found");
+        }
+        await db
+          .collection("users")
+          .updateOne({ email: userEmail }, { $set: { isVoted: true } });
+        res.render("main.ejs", { isVoted: true , userEmail: userEmail});
+      } else {
+        res.render("main.ejs", { isVoted: true , userEmail: userEmail});
+      }
     } catch (err) {
       res.json({ message: err.message });
     }
@@ -203,7 +262,6 @@ app.get("/vote", async (req, res) => {
 
 app.get("/calculateResult", async (req, res) => {
   const time = new Date().getHours();
-  console.log(choicesForTheDay);
   try {
     if (time >= 18 || time < 6) {
       const winner = await db
@@ -226,23 +284,38 @@ app.get("/calculateResult", async (req, res) => {
 app.get("/CIT/policy", (req, res) => {
   res.render("policy.ejs");
 });
+
 //functions
-function selectRandomFood() {
-  choicesForTheDay = [];
-  const randomIndex = [];
-  while (randomIndex.length < 8) {
-    const idx = Math.floor(Math.random() * vegFoods.length);
-    if (!randomIndex.includes(idx)) {
-      randomIndex.push(idx);
+async function selectRandomFood() {
+  try {
+    await db.collection("books").deleteMany({});
+    choicesForTheDay = [];
+    const randomIndex = [];
+    while (randomIndex.length < 8) {
+      const idx = Math.floor(Math.random() * vegFoods.length);
+      if (!randomIndex.includes(idx)) {
+        randomIndex.push(idx);
+      }
     }
+    randomIndex.forEach((index) => {
+      const randFood = {
+        name: vegFoods[index].name,
+        votes: 0,
+      };
+      choicesForTheDay.push(randFood);
+      db.collection("books").insertOne(randFood);
+    });
+    console.log(choicesForTheDay);
+  } catch (e) {
+    console.log("Error selecting random foods", e);
   }
-  randomIndex.forEach((index) => {
-    const randFood = {
-      name: vegFoods[index].name,
-      votes: 0,
-    };
-    choicesForTheDay.push(randFood);
-    db.collection("books").insertOne(randFood);
-  });
-  console.log(choicesForTheDay);
+}
+
+async function resetIsVoted() {
+  try {
+    await db.collection("users").updateMany({}, { $set: { isVoted: false } });
+    console.log("Reset isVoted is successful");
+  } catch (e) {
+    console.log("Error resetting isVoted", e);
+  }
 }
