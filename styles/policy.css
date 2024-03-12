@@ -45,6 +45,10 @@ li a:hover {
   margin-left: none;
   text-transform: uppercase;
 }
+.navbar_logo {
+  text-decoration: none;
+  color: var(--mainColor);
+}
 .navbar_list {
   display: flex;
   font-size: 1.1rem;
@@ -53,6 +57,7 @@ li a:hover {
 .navbar_list li {
   margin-right: 1em;
   color: hsl(0, 0%, 100%);
+  list-style-type: none;
 }
 .navbar_icons {
   color: var(--mainColor);

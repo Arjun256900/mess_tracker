@@ -58,20 +58,23 @@ a {
   text-decoration: none;
 }
 
-.home:hover {
-  text-decoration: underline;
-}
 .navbar_icons {
   color: var(--mainColor);
   margin-right: 0.5em;
   font-size: 1.2rem;
 }
 
-.navbar > img {
+/* .navbar > img {
   margin-left: 20px;
   border-radius: 20px;
   max-width: 70px;
+} */
+.navbar > a img {
+  margin-left: 20px;
+  border-radius: 10px;
+  max-width: 70px;
 }
+
 .header_desc {
   color: hsl(0, 0%, 100%);
 }
