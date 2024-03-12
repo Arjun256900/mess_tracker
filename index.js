@@ -153,7 +153,7 @@ app.post(
       }
     }
     if (errors.isEmpty() && isOpen == false) {
-      res.render("main.ejs"); //CHANGE THIS
+      res.render("main.ejs", {userEmail: req.body.email}); //CHANGE THIS
     }
   }
 );
@@ -226,7 +226,8 @@ var choicesForTheDay = [
   { name: "vada-curry", votes: 0 },
   { name: "idly", votes: 0 },
 ];
-// setInterval(selectRandomFood, 15000);
+
+// setInterval(selectRandomFood, 24*60*60*1000);
 
 app.get("/vote", async (req, res) => {
   let time = new Date().getHours();
