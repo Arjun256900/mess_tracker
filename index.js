@@ -33,17 +33,50 @@ const passwordConfirmationCheck = (value, { req }) => {
   return true;
 };
 
-const now = new Date();
-const millisTill6PM =
-  new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0) - now;
+// const now = new Date();
+// const millisTill6PM =
+//   new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0) - now;
 
-if (millisTill6PM > 0) {
-  // If there's still some time left, just wait till 6PM
-  setTimeout(resetIsVoted, millisTill6PM);
+// if (millisTill6PM > 0) {
+//   // If there's still some time left, just wait till 6PM
+//   setTimeout(resetIsVoted, millisTill6PM);
+// } else {
+//   // Run immediatly if it's already past 6PM
+//   resetIsVoted();
+// }
+// Modify the opening hour check
+const now = new Date();
+const openingHour = 13; // 1 PM
+const closingHour = 13; // 1 PM
+const closingMinute = 15; // 1:15 PM
+
+const currentHour = now.getHours();
+const currentMinute = now.getMinutes();
+
+const isOpen =
+  currentHour === openingHour &&
+  currentMinute >= 0 &&
+  currentMinute <= closingMinute;
+
+// Adjust the interval for resetting the voting status
+const millisTillClosing =
+  new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    closingHour,
+    closingMinute,
+    0
+  ) - now;
+
+if (millisTillClosing > 0) {
+  // If there's still some time left, just wait till closing time
+  setTimeout(resetIsVoted, millisTillClosing);
 } else {
-  // Run immediatly if it's already past 6PM
+  // Run immediately if it's already past closing time
   resetIsVoted();
 }
+
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
@@ -73,8 +106,11 @@ app.post(
   ],
   async (req, res) => {
     var isOpen = false;
-    const time = 19;
-    if (time > 6 && time < 18) {
+    // const time = new Date().getHours();
+    const time = new Date();
+    const currentHours = time.getHours();
+    const currentMinutes = time.getMinutes();
+    if (currentHours >= 14 && currentMinutes >=0 && currentMinutes<=15) {
       isOpen = true;
     } else {
       isOpen = false;
@@ -127,8 +163,11 @@ app.post(
   ],
   async (req, res) => {
     var isOpen = false;
-    const time = new Date().getHours();
-    if (time > 6 && time < 18) {
+    // const time = new Date().getHours();
+    const time = new Date();
+    const currentHours = time.getHours();
+    const currentMinutes = time.getMinutes();
+    if (currentHours>=14 && currentMinutes>=0 && currentMinutes<=15) {
       isOpen = true;
     }
     const errors = validationResult(req);
@@ -160,8 +199,11 @@ app.post(
 );
 
 app.get("/home", async (req, res) => {
-  const time = new Date().getHours();
-  if (time > 6 && time < 18) {
+  // const time = new Date().getHours();
+  const time = new Date();
+  const currentHours = time.getHours();
+  const currentMinutes = time.getMinutes();
+  if (currentHours>=14 && currentMinutes>=0 && currentMinutes<=15) {
     let currentFoods = await db.collection("foods").find().toArray();
     let voted = await db
       .collection("users")
@@ -231,8 +273,11 @@ var choicesForTheDay = [
 // setInterval(selectRandomFood, 10000);
 
 app.get("/vote", async (req, res) => {
-  let time = new Date().getHours();
-  if (time > 6 && time < 18) {
+  // let time = new Date().getHours();
+  const time = new Date();
+  const currentHours = time.getHours();
+  const currentMinutes = time.getMinutes();
+  if (currentHours >= 14 && currentMinutes >= 0 && currentMinutes<=15) {
     try {
       const userEmail = req.query.email.toLocaleLowerCase();
       const user = await db.collection("users").findOne({ email: userEmail });
@@ -263,9 +308,13 @@ app.get("/vote", async (req, res) => {
 });
 
 app.get("/calculateResult", async (req, res) => {
-  const time = new Date().getHours();
+  // const time = new Date().getHours();
+  const time = new Date();
+  const currentHours = time.getHours();
+  const currentMinutes = time.getMinutes();
   try {
-    if (time >= 18 || time < 6) {
+    // if (time >= 18 || time < 6) {
+      if(currentHours >=14 && currentMinutes >15){
       const winner = await db
         .collection("foods")
         .aggregate([{ $sort: { votes: -1 } }, { $limit: 1 }])
