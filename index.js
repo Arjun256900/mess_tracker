@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 const PORT = 3000;
 const app = express();
 
-const mongoURI = "mongodb://localhost:27017/bookstore";
+const mongoURI =
+  "mongodb+srv://ArjunAdmin:Arjuncoc_101@messtrackercit.yn9k2qj.mongodb.net/?retryWrites=true&w=majority&appName=MessTrackerCIT";
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -97,7 +98,7 @@ app.post(
           isVoted: false,
           isAdmin: false,
         });
-        let currentFoods = await db.collection("books").find().toArray();
+        let currentFoods = await db.collection("foods").find().toArray();
         res.render("main.ejs", {
           choices: currentFoods,
           userEmail: req.body.email,
@@ -141,7 +142,7 @@ app.post(
         .collection("users")
         .findOne({ email: req.body.email });
       if (isExist != null && isExist.isVoted == false) {
-        let currentFoods = await db.collection("books").find().toArray();
+        let currentFoods = await db.collection("foods").find().toArray();
         res.render("main.ejs", {
           choices: currentFoods,
           userEmail: req.body.email,
@@ -153,7 +154,7 @@ app.post(
       }
     }
     if (errors.isEmpty() && isOpen == false) {
-      res.render("main.ejs", {userEmail: req.body.email}); //CHANGE THIS
+      res.render("main.ejs", { userEmail: req.body.email }); //CHANGE THIS
     }
   }
 );
@@ -161,7 +162,7 @@ app.post(
 app.get("/home", async (req, res) => {
   const time = new Date().getHours();
   if (time > 6 && time < 18) {
-    let currentFoods = await db.collection("books").find().toArray();
+    let currentFoods = await db.collection("foods").find().toArray();
     let voted = await db
       .collection("users")
       .findOne({ email: req.query.email });
@@ -174,7 +175,7 @@ app.get("/home", async (req, res) => {
       res.render("main.ejs", { isVoted: true, userEmail: req.query.email });
     }
   } else {
-    res.render("main.ejs", {userEmail: req.query.email});
+    res.render("main.ejs", { userEmail: req.query.email });
   }
 });
 
@@ -227,7 +228,7 @@ var choicesForTheDay = [
   { name: "idly", votes: 0 },
 ];
 
-// setInterval(selectRandomFood, 24*60*60*1000);
+// setInterval(selectRandomFood, 10000);
 
 app.get("/vote", async (req, res) => {
   let time = new Date().getHours();
@@ -241,7 +242,7 @@ app.get("/vote", async (req, res) => {
       if (user.isVoted == false) {
         const foodName = req.query.food;
         const result = await db
-          .collection("books")
+          .collection("foods")
           .updateOne({ name: foodName }, { $inc: { votes: 1 } });
         if (result.modifiedCount == 0) {
           return res.status(404).send("Food not found");
@@ -249,9 +250,9 @@ app.get("/vote", async (req, res) => {
         await db
           .collection("users")
           .updateOne({ email: userEmail }, { $set: { isVoted: true } });
-        res.render("main.ejs", { isVoted: true , userEmail: userEmail});
+        res.render("main.ejs", { isVoted: true, userEmail: userEmail });
       } else {
-        res.render("main.ejs", { isVoted: true , userEmail: userEmail});
+        res.render("main.ejs", { isVoted: true, userEmail: userEmail });
       }
     } catch (err) {
       res.json({ message: err.message });
@@ -266,7 +267,7 @@ app.get("/calculateResult", async (req, res) => {
   try {
     if (time >= 18 || time < 6) {
       const winner = await db
-        .collection("books")
+        .collection("foods")
         .aggregate([{ $sort: { votes: -1 } }, { $limit: 1 }])
         .toArray();
       if (winner.length == 0) {
@@ -289,7 +290,7 @@ app.get("/CIT/policy", (req, res) => {
 //functions
 async function selectRandomFood() {
   try {
-    await db.collection("books").deleteMany({});
+    await db.collection("foods").deleteMany({});
     choicesForTheDay = [];
     const randomIndex = [];
     while (randomIndex.length < 8) {
@@ -304,7 +305,7 @@ async function selectRandomFood() {
         votes: 0,
       };
       choicesForTheDay.push(randFood);
-      db.collection("books").insertOne(randFood);
+      db.collection("foods").insertOne(randFood);
     });
     console.log(choicesForTheDay);
   } catch (e) {
